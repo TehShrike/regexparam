@@ -1,12 +1,14 @@
-# regexparam [![Build Status](https://travis-ci.org/lukeed/regexparam.svg?branch=master)](https://travis-ci.org/lukeed/regexparam)
+# @tehshrike/regexparam
 
-> A tiny (252B) utility that converts route patterns into RegExp. Limited alternative to [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) 🙇
+[regexparam](https://github.com/lukeed/regexparam), but with longer variable names, and support for custom regex patterns.
 
-With `regexparam`, you may turn a pathing string (eg, `/users/:id`) into a regular expression.
+> A tiny (256B) utility that converts route patterns into RegExp. Limited alternative to [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) 🙇
+
+With `@tehshrike/regexparam`, you may turn a pathing string (eg, `/users/:id`) into a regular expression.
 
 An object with shape of `{ keys, pattern }` is returned, where `pattern` is the `RegExp` and `keys` is an array of your parameter name(s) in the order that they appeared.
 
-Unlike [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp), this module does not create a `keys` dictionary, nor mutate an existing variable. Also, this only ships a parser, which only accept strings. Similarly, and most importantly, `regexparam` **only** handles basic pathing operators:
+Unlike [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp), this module does not create a `keys` dictionary, nor mutate an existing variable. Also, this only ships a parser, which only accept strings. Similarly, and most importantly, `@tehshrike/regexparam` **only** handles basic pathing operators:
 
 * Static (`/foo`, `/foo/bar`)
 * Parameter (`/:title`, `/books/:title`, `/books/:genre/:title`)
@@ -23,22 +25,29 @@ This module exposes two module definitions:
 ## Install
 
 ```
-$ npm install --save regexparam
+$ npm install --save @tehshrike/regexparam
 ```
 
 
 ## Usage
 
+```
+const regexparam = require('@tehshrike/regexparam');
+```
+
+<!--js
+const regexparam = require('./dist/regexparam.js')
+-->
+
 ```js
-const regexparam = require('regexparam');
 
 let foo = regexparam('users/*');
-// foo.keys => ['wild']
-// foo.pattern => /^\/users\/(.*)(?:\/)?\/?$/i
+foo.keys // => ['wild']
+foo.pattern // => /^\/users\/(.*)(?:\/)?\/?$/i
 
 let bar = regexparam('/books/:genre/:title?')
-// bar.keys => ['genre', 'title']
-// bar.pattern => /^\/books\/([^\/]+?)(?:\/([^\/]+?))?(?:\/)?\/?$/i
+bar.keys // => ['genre', 'title']
+bar.pattern // => /^\/books\/([^\/]+?)(?:\/([^\/]+?))?(?:\/)?\/?$/i
 
 bar.pattern.test('/books/horror'); //=> true
 bar.pattern.test('/books/horror/goosebumps'); //=> true
@@ -53,11 +62,9 @@ function exec(path, result) {
   return out;
 }
 
-exec('/books/horror', bar);
-//=> { genre:'horror', title:null }
+exec('/books/horror', bar); //=> { genre:'horror', title:null }
 
-exec('/books/horror/goosebumps', bar);
-//=> { genre:'horror', title:'goosebumps' }
+exec('/books/horror/goosebumps', bar); //=> { genre:'horror', title:'goosebumps' }
 ```
 
 > **Important:** When matching/testing against a generated RegExp, your path **must** begin with a leading slash (`"/"`)!
