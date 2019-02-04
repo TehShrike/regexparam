@@ -1,6 +1,6 @@
 # @tehshrike/regexparam
 
-[regexparam](https://github.com/lukeed/regexparam), but with longer variable names, and support for custom regex patterns.
+[regexparam](https://github.com/lukeed/regexparam) with support for custom regex patterns.
 
 > A tiny (256B) utility that converts route patterns into RegExp. Limited alternative to [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) 🙇
 
@@ -41,7 +41,7 @@ const regexparam = require('./dist/regexparam.js')
 
 ```js
 
-let foo = regexparam('users/*');
+let foo = regexparam('users/*')
 foo.keys // => ['wild']
 foo.pattern // => /^\/users\/(.*)(?:\/)?\/?$/i
 
@@ -49,22 +49,23 @@ let bar = regexparam('/books/:genre/:title?')
 bar.keys // => ['genre', 'title']
 bar.pattern // => /^\/books\/([^\/]+?)(?:\/([^\/]+?))?(?:\/)?\/?$/i
 
-bar.pattern.test('/books/horror'); //=> true
-bar.pattern.test('/books/horror/goosebumps'); //=> true
+bar.pattern.test('/books/horror') //=> true
+bar.pattern.test('/books/horror/goosebumps') //=> true
 
 // Example param-assignment
-function exec(path, result) {
-  let i=0, out={};
-  let matches = result.pattern.exec(path);
-  while (i < result.keys.length) {
-    out[ result.keys[i] ] = matches[++i] || null;
-  }
-  return out;
+function exec(path, { keys, pattern }) {
+	const matches = pattern.exec(path)
+	const out = {}
+	keys.forEach((key, i) => {
+		out[key] = matches[i + 1] || null
+	})
+
+	return out
 }
 
-exec('/books/horror', bar); //=> { genre:'horror', title:null }
+exec('/books/horror', bar) //=> { genre:'horror', title:null }
 
-exec('/books/horror/goosebumps', bar); //=> { genre:'horror', title:'goosebumps' }
+exec('/books/horror/goosebumps', bar) //=> { genre:'horror', title:'goosebumps' }
 ```
 
 > **Important:** When matching/testing against a generated RegExp, your path **must** begin with a leading slash (`"/"`)!
