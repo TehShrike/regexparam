@@ -1,23 +1,26 @@
-export default function (str) {
-	var c, o, tmp, keys=[], pattern='', arr=str.split('/');
-	arr[0] || arr.shift();
+export default function(str) {
+	const keys = [], chunks = str.split(`/`)
+	chunks[0] || chunks.shift()
 
-	while (tmp = arr.shift()) {
-		c = tmp[0];
-		if (c === '*') {
-			keys.push('wild');
-			pattern += '/(.*)';
-		} else if (c === ':') {
-			o = tmp[tmp.length - 1] === '?'; // optional?
-			keys.push( tmp.substring(1, o ? tmp.length - 1 : tmp.length) );
-			pattern += o ? '(?:/([^/]+?))?' : '/([^/]+?)';
+	const pattern = chunks.map(chunk => {
+		const firstCharacter = chunk[0]
+
+		if (firstCharacter === `*`) {
+			keys.push(`wild`)
+			return `/(.*)`
+		} else if (firstCharacter === `:`) {
+			const optional = chunk[chunk.length - 1] === `?`
+			keys.push(chunk.substring(1, optional ? chunk.length - 1 : chunk.length))
+			return optional
+				? `(?:/([^/]+?))?`
+				: `/([^/]+?)`
 		} else {
-			pattern += '/' + tmp;
+			return `/` + chunk
 		}
-	}
+	}).join(``)
 
 	return {
-		keys: keys,
-		pattern: new RegExp('^' + pattern + (keys.length ? '(?:/)?' : '') + '\/?$', 'i')
-	};
+		keys,
+		pattern: new RegExp(`^` + pattern + (keys.length ? `(?:/)?` : ``) + `/?$`, `i`),
+	}
 }
