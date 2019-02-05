@@ -1,8 +1,8 @@
 # @tehshrike/regexparam
 
-[regexparam](https://github.com/lukeed/regexparam) with support for custom regex patterns.
+[regexparam](https://github.com/lukeed/regexparam) with longer variable names and support for custom regex patterns.
 
-> A tiny (256B) utility that converts route patterns into RegExp. Limited alternative to [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) 🙇
+> A tiny (332B) utility that converts route patterns into RegExp. Limited alternative to [`path-to-regexp`](https://github.com/pillarjs/path-to-regexp) 🙇
 
 With `@tehshrike/regexparam`, you may turn a pathing string (eg, `/users/:id`) into a regular expression.
 

@@ -1,8 +1,8 @@
 {
-  "name": "regexparam",
+  "name": "@tehshrike/regexparam",
   "version": "1.0.2",
-  "repository": "lukeed/regexparam",
-  "description": "A tiny (252B) utility that converts route patterns into RegExp. Limited alternative to `path-to-regexp` 🙇‍",
+  "repository": "TehShrike/regexparam",
+  "description": "A tiny (332B) utility that converts route patterns into RegExp. Limited alternative to `path-to-regexp` 🙇‍",
   "module": "dist/regexparam.mjs",
   "main": "dist/regexparam.js",
   "license": "MIT",

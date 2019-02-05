@@ -150,6 +150,12 @@ test(`param :: optional :: multiple`, t => {
 	t.is(genre, `horror`, `~> executing pattern gives correct value`)
 	t.is(author, `smith`, `~> executing pattern gives correct value`)
 	t.is(title, `narnia`, `~> executing pattern gives correct value`)
+
+	const [ , genre2, author2, title2 ] = pattern.exec(`/books/horror/smith`)
+	t.is(genre2, `horror`, `~> executing pattern gives correct value`)
+	t.is(author2, `smith`, `~> executing pattern gives correct value`)
+	t.is(title2, undefined)
+
 	t.end()
 })
 
@@ -180,3 +186,42 @@ test(`wildcard :: root`, t => {
 	t.end()
 })
 
+test(`Arbitrary regex patterns in routes`, t => {
+	const { keys, pattern } = fn(`wat/:id(\\d+)`)
+
+	t.same(keys, [ `id` ])
+	t.true(pattern.test(`/wat/14`))
+	t.false(pattern.test(`/wat/`))
+
+	const [ , id ] = pattern.exec(`/wat/22`)
+
+	t.is(id, `22`)
+
+	t.end()
+})
+
+test(`Optional arbitrary regex patterns in routes`, t => {
+	const { keys, pattern } = fn(`wat/:id(\\d+)?`)
+
+	t.same(keys, [ `id` ])
+	t.true(pattern.test(`/wat/14`))
+	t.true(pattern.test(`/wat/`))
+
+	const [ , id ] = pattern.exec(`/wat/`)
+
+	t.is(id, undefined)
+
+	t.end()
+})
+
+test(`A regular pattern name that ends in an end-parenthese`, t => {
+	const { keys, pattern } = fn(`foo/:bad-idea)`)
+
+	t.same(keys, [ `bad-idea)` ])
+
+	const [ , badIdea ] = pattern.exec(`/foo/anything`)
+
+	t.is(badIdea, `anything`)
+
+	t.end()
+})
